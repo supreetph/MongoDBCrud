@@ -16,12 +16,12 @@ namespace MongoDBDemo.Controllers
         // GET: ProductController
         public ActionResult Index()
         {
-            var db = mongoClient.GetDatabase("ecommerce");
-            var collection = db.GetCollection<Products>("products");
-            
-            var productsResult= collection.Find(new BsonDocument()).ToList();
 
-            return View(productsResult);
+            var database = mongoClient.GetDatabase("ecommerce");
+            var collection = database.GetCollection<Products>("products");
+            var productResults = collection.Find<Products>(a => true).ToList();
+
+            return View(productResults);
         }
 
         // GET: ProductController/Details/5
@@ -43,10 +43,10 @@ namespace MongoDBDemo.Controllers
         {
             try
             {
-                var db = mongoClient.GetDatabase("ecommerce");
-                var collection = db.GetCollection<Products>("products");
+                var database = mongoClient.GetDatabase("ecommerce");
+                var collection = database.GetCollection<Products>("products");
+             collection.InsertOne(products);
 
-                collection.InsertOne(products);
                 return RedirectToAction(nameof(Index));
             }
             catch
