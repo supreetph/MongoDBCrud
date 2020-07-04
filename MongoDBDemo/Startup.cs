@@ -32,6 +32,7 @@ namespace MongoDBDemo
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors(options => options.AllowAnyOrigin());
             }
             else
             {
