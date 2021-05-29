@@ -34,6 +34,8 @@ namespace MongoDBDemo
             {
                 app.UseDeveloperExceptionPage();
                 app.UseCors(options => options.AllowAnyOrigin());
+                app.UseCors(a => a.AllowAnyMethod());
+                app.UseCors(a => a.AllowAnyHeader());
             }
             else
             {

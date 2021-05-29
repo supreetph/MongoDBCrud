@@ -29,28 +29,29 @@ namespace MongoDBDemo.Controllers
         [HttpGet]
         public async Task<IEnumerable<Products>> Get()
         
+        
         {
             IEnumerable<Products> productResults;
             string serializedProducts;
-           // await _distributedCache.RemoveAsync("");
-            var encodedProducts = await _distributedCache.GetAsync("");
-            if (encodedProducts != null)
-            {
-                serializedProducts = Encoding.UTF8.GetString(encodedProducts);
-                productResults = JsonConvert.DeserializeObject<IEnumerable<Products>>(serializedProducts);
-            }
-            else
-            {
+           
+            //var encodedProducts = await _distributedCache.GetAsync("");
+            //if (encodedProducts != null)
+            //{
+            //    serializedProducts = Encoding.UTF8.GetString(encodedProducts);
+            //    productResults = JsonConvert.DeserializeObject<IEnumerable<Products>>(serializedProducts);
+            //}
+           // else
+           // {
 
                 var database = mongoClient.GetDatabase("ecommerce");
                 var collection = database.GetCollection<Products>("products");
                 productResults = collection.Find<Products>(a => true).ToList();
                 serializedProducts = JsonConvert.SerializeObject(productResults);
-                encodedProducts = Encoding.UTF8.GetBytes(serializedProducts);
-                var option = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5)).SetAbsoluteExpiration(DateTime.Now.AddHours(6));
-                await _distributedCache.SetAsync("", encodedProducts, option);
+              //  encodedProducts = Encoding.UTF8.GetBytes(serializedProducts);
+              //  var option = new DistributedCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5)).SetAbsoluteExpiration(DateTime.Now.AddHours(6));
+             //   await _distributedCache.SetAsync("", encodedProducts, option);
                
-            }
+           // }
             return (IEnumerable<Products>)productResults;
         }
 
